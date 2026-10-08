@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Creator Club - Exclusive Access</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Inter, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #141428 0%, #07070d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hero-card {
+            background: rgba(23, 23, 38, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(236, 72, 153, 0.15);
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .pricing-box {
+            background: rgba(15, 15, 26, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .price {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #38bdf8;
+        }
+
+        .price-sub {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .btn-subscribe {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-subscribe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.5);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: #0f0f1a;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #94a3b8;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Step Card */
+        .step-box {
+            background: rgba(23, 23, 38, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .step-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #8b5cf6;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .bank-info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 18, 0.6);
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .bank-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .bank-val {
+            font-weight: 700;
+            color: #38bdf8;
+            font-size: 0.95rem;
+        }
+
+        .account-number-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px dashed #8b5cf6;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-top: 6px;
+        }
+
+        .acc-num {
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #f43f5e;
+            letter-spacing: 1px;
+        }
+
+        .copy-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #7c3aed;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed rgba(236, 72, 153, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(236, 72, 153, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(236, 72, 153, 0.08);
+            border-color: #ec4899;
+        }
+
+        .upload-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #10b981;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* Input Form */
+        .input-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 18, 0.8);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #8b5cf6;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #128c7e, #075e54);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Hero Card -->
+    <div class="hero-card">
+        <div class="badge">VIP Club</div>
+        <h1 class="title">Exclusive Content</h1>
+        <p class="subtitle">Premium Updates & HD Media</p>
+        
+        <div class="pricing-box">
+            <div class="price">$15</div>
+            <div class="price-sub">One-time Joining Fee</div>
+        </div>
+
+        <button class="btn-subscribe" id="openModalBtn">Subscribe Now</button>
+    </div>
+
+    <!-- Modal Popup -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Meezan Bank Transfer</div>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+
+            <!-- STEP 1: Bank Details -->
+            <div class="step-box">
+                <div class="step-title">Step 1: Send Payment To Account</div>
+                <div class="bank-info-grid">
+                    <div class="bank-row">
+                        <span class="bank-label">Bank Name</span>
+                        <span class="bank-val">Meezan Bank</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Account Title</span>
+                        <span class="bank-val">SK EDITS / VIP</span>
+                    </div>
+                    <div class="account-number-box">
+                        <div>
+                            <div style="font-size: 0.75rem; color: #94a3b8; text-align: left;">Account Number</div>
+                            <div class="acc-num" id="accNumber">12870115553925</div>
+                        </div>
+                        <button class="copy-btn" id="copyBtn">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Screenshot Upload -->
+            <div class="step-box">
+                <div class="step-title">Step 2: Upload Payment Screenshot</div>
+                <div class="upload-area" id="uploadDropzone">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">Click to Upload Payment Screenshot Only</div>
+                    <div class="file-preview" id="filePreview">✓ Payment Screenshot Selected</div>
+                    <div class="error-msg" id="errorMsg">⚠️ Invalid file! Please upload a valid payment receipt screenshot image (PNG/JPG).</div>
+                    <input type="file" class="file-input" id="fileInput" accept="image/*">
+                </div>
+            </div>
+
+            <!-- STEP 3: Verification Details -->
+            <div class="step-box">
+                <div class="step-title">Step 3: Verification Details</div>
+                <div class="input-group">
+                    <label>Sender Name / Account Holder</label>
+                    <input type="text" id="senderName" placeholder="e.g. Ali Khan">
+                </div>
+                <div class="input-group">
+                    <label>Transaction ID / Ref No. (Optional)</label>
+                    <input type="text" id="trxId" placeholder="e.g. 98213847120">
+                </div>
+
+                <button class="btn-submit" id="submitBtn">
+                    <span>Join WhatsApp Channel</span> 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const copyBtn = document.getElementById('copyBtn');
+        const accNumber = document.getElementById('accNumber');
+        const uploadDropzone = document.getElementById('uploadDropzone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // 🔥 AAPKA WHATSAPP CHANNEL LINK
+        const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029VbE7MRm2phHUZv5Bm03x"; 
+
+        let isValidImageUploaded = false;
+
+        // Open Modal
+        openModalBtn.onclick = function() {
+            paymentModal.classList.add('active');
+        };
+
+        // Close Modal
+        closeModalBtn.onclick = function() {
+            paymentModal.classList.remove('active');
+        };
+
+        // Copy Account Number
+        copyBtn.onclick = function() {
+            navigator.clipboard.writeText(accNumber.innerText).then(function() {
+                copyBtn.innerText = 'Copied!';
+                copyBtn.style.background = '#10b981';
+                setTimeout(function() {
+                    copyBtn.innerText = 'Copy';
+                    copyBtn.style.background = '#8b5cf6';
+                }, 2000);
+            });
+        };
+
+        // File Upload Handling
+        uploadDropzone.onclick = function() {
+            fileInput.click();
+        };
+
+        fileInput.onchange = function() {
+            errorMsg.style.display = 'none';
+            filePreview.style.display = 'none';
+            isValidImageUploaded = false;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+
+                // Validating image type
+                if (file.type.startsWith('image/')) {
+                    isValidImageUploaded = true;
+                    filePreview.innerText = "✓ Valid Screenshot Selected: " + file.name;
+                    filePreview.style.display = 'block';
+                } else {
+                    errorMsg.innerText = "⚠️ Sirf Payment Screenshot Image allow hai!";
+                    errorMsg.style.display = 'block';
+                    fileInput.value = "";
+                }
+            }
+        };
+
+        // Submit Button Action (Validates Screenshot & Opens Channel)
+        submitBtn.onclick = function() {
+            const senderName = document.getElementById('senderName').value.trim();
+
+            if (!isValidImageUploaded) {
+                alert('Meharbani karke pehle payment ka valid Screenshot upload karein!');
+                errorMsg.innerText = "⚠️ Payment screenshot upload karna zaroori hai!";
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (!senderName) {
+                alert('Meharbani karke apna Sender Name enter karein!');
+                return;
+            }
+
+            // Redirect to WhatsApp Channel
+            window.open(WHATSAPP_CHANNEL_URL, '_blank');
+        };
+    </script>
+</body>
+</html>
